@@ -6,7 +6,7 @@ import auth from '../firebase.init';
 
 const Navbar = () => {
 
-    const [user, loading, error] = useAuthState(auth);
+    const [user] = useAuthState(auth);
 
     return (
         <div className='flex justify-between items-center flex-col md:flex-row lg:flex-row bg-slate-300 px-3 py-3 space-y-3 lg:space-y-0'>

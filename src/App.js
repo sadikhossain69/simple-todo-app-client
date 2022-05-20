@@ -5,15 +5,20 @@ import Home from './components/Home';
 import Login from './components/Login';
 import Navbar from './components/Navbar';
 import Register from './components/Register';
+import RequireAuth from './components/RequireAuth';
 
 function App() {
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <Routes>
-        <Route path='/' element={<Home/>} />
-        <Route path='/login' element={<Login/>} />
-        <Route path='/register' element={<Register/>} />
+        <Route path='/' element={
+          <RequireAuth>
+            <Home />
+          </RequireAuth>
+        } />
+        <Route path='/login' element={<Login />} />
+        <Route path='/register' element={<Register />} />
       </Routes>
       <Toaster />
     </div>

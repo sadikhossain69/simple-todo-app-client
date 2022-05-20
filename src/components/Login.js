@@ -3,7 +3,7 @@ import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-fireba
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { BsGoogle } from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import auth from '../firebase.init';
 import Loading from './Loading';
 
@@ -19,19 +19,26 @@ const Login = () => {
 
     const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
 
+    const navigate = useNavigate()
+    const location = useLocation()
+
+    let from = location.state?.from?.pathname || "/";
+
     useEffect( () => {
         if (emailUser) {
             console.log(emailUser);
             toast.success('User Logged In', {id: 'user logged in'})
+            navigate(from, { replace: true });
         }
-    }, [emailUser] )
+    }, [emailUser, navigate, from] )
 
     useEffect( () => {
         if(googleUser) {
             console.log(googleUser);
             toast.success('User Logged In', {id: 'user logged in'})
+            navigate(from, { replace: true });
         }
-    }, [googleUser] )
+    }, [googleUser, navigate, from] )
 
     if(emailLoading || googleLoading) {
         return <Loading/>
