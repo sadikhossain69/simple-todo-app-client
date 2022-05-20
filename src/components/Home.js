@@ -54,6 +54,41 @@ const Home = () => {
                     <input className='text-center bg-blue-600 text-white font-semibold py-1 px-4 rounded hover:bg-blue-500 hover:duration-300 hover:scale-125 cursor-pointer' type="submit" value="Submit" />
                 </form>
             </div>
+            <div className="divider"></div>
+            <div className="overflow-x-auto mx-auto md:w-2/3">
+                <table className="table w-full">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Task</th>
+                            <th>Action</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>1</th>
+                            <td>Cy Ganderton</td>
+                            <td>Quality Control Specialist</td>
+                            <td><button className="btn-xl bg-green-500 hover:bg-green-400 py-1 px-3 rounded text-white font-semibold">Completed</button></td>
+                            <td><button className="btn-xl bg-red-500 py-1 px-3 rounded text-white hover:bg-red-400 font-semibold">Delete</button></td>
+                        </tr>
+                        <tr>
+                            <th>2</th>
+                            <td>Hart Hagerty</td>
+                            <td>Desktop Support Technician</td>
+                            <td>Purple</td>
+                        </tr>
+                        <tr>
+                            <th>3</th>
+                            <td>Brice Swyre</td>
+                            <td>Tax Accountant</td>
+                            <td>Red</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     );
 };
