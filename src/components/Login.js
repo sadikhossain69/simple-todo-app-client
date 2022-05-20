@@ -1,14 +1,42 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast';
 import { BsGoogle } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
+import auth from '../firebase.init';
+import Loading from './Loading';
 
 const Login = () => {
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm()
+    const { register, handleSubmit, reset, formState: { errors } } = useForm()
+    const [
+        signInWithEmailAndPassword,
+        emailUser,
+        emailLoading,
+        emailError,
+    ] = useSignInWithEmailAndPassword(auth);
+
+    useEffect( () => {
+        if (emailUser) {
+            console.log(emailUser);
+            toast.success('User Logged In', {id: 'user logged in'})
+        }
+    }, [emailUser] )
+
+    if (emailLoading) {
+        return <Loading />
+    }
+
+    if (emailError) {
+        toast.error(emailError.message, { id: 'email error' })
+    }
 
     const onLogin = data => {
-        console.log(data);
+        const email = data.email
+        const password = data.password
+        signInWithEmailAndPassword(email, password)
+        reset()
     }
 
     return (
@@ -61,10 +89,10 @@ const Login = () => {
                                     {errors.password?.type === 'minLength' && <p className="label-text-alt text-red-500 font-semibold">{errors.password.message}</p>}
                                 </label>
                             </div>
-                        <p className='font-semibold'>New to Todo app? <Link className='text-green-600' to='/register' >Register Here</Link> </p>
-                        <div className="form-control mt-3">
-                            <button className="btn btn-primary">Login</button>
-                        </div>
+                            <p className='font-semibold'>New to Todo app? <Link className='text-green-600' to='/register' >Register Here</Link> </p>
+                            <div className="form-control mt-3">
+                                <button className="btn btn-primary">Login</button>
+                            </div>
                         </form>
                         <div className="divider">OR</div>
                         <div className="form-control">

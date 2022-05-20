@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { BsGoogle } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import auth from '../firebase.init';
 import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
 import Loading from './Loading';
+import toast from 'react-hot-toast';
 
 const Register = () => {
 
@@ -17,14 +18,20 @@ const Register = () => {
       ] = useCreateUserWithEmailAndPassword(auth, {sendEmailVerification: true});
 
       
-    if(emailUser) {
-        console.log(emailUser);
-    }
+      useEffect( () => {
+        if (emailUser) {
+            console.log(emailUser);
+            toast.success('User Logged In', {id: 'user logged in'})
+        }
+    }, [emailUser] )
 
     if(emailLoading) {
         return <Loading/>
     }
-    
+
+    if(emailError) {
+        toast.error(emailError.message, {id: 'email error'})
+    }
 
     const onRegister = data => {
         const email = data.email
