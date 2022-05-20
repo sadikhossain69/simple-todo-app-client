@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useSignInWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
 import { BsGoogle } from 'react-icons/bs';
@@ -17,6 +17,8 @@ const Login = () => {
         emailError,
     ] = useSignInWithEmailAndPassword(auth);
 
+    const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
+
     useEffect( () => {
         if (emailUser) {
             console.log(emailUser);
@@ -24,12 +26,19 @@ const Login = () => {
         }
     }, [emailUser] )
 
-    if (emailLoading) {
-        return <Loading />
+    useEffect( () => {
+        if(googleUser) {
+            console.log(googleUser);
+            toast.success('User Logged In', {id: 'user logged in'})
+        }
+    }, [googleUser] )
+
+    if(emailLoading || googleLoading) {
+        return <Loading/>
     }
 
-    if (emailError) {
-        toast.error(emailError.message, { id: 'email error' })
+    if(emailError || googleError) {
+        toast.error(emailError.message, {id: 'email error'})
     }
 
     const onLogin = data => {
@@ -96,7 +105,7 @@ const Login = () => {
                         </form>
                         <div className="divider">OR</div>
                         <div className="form-control">
-                            <button className="btn btn-success text-white"> <BsGoogle className='text-xl text-red-500 mr-3' />Continue With Google</button>
+                            <button onClick={ () => signInWithGoogle() } className="btn btn-success text-white"> <BsGoogle className='text-xl text-red-500 mr-3' />Continue With Google</button>
                         </div>
                     </div>
                 </div>

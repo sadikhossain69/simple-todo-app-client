@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { BsGoogle } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import auth from '../firebase.init';
-import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import { useCreateUserWithEmailAndPassword, useSignInWithGoogle } from 'react-firebase-hooks/auth';
 import Loading from './Loading';
 import toast from 'react-hot-toast';
 
@@ -17,6 +17,8 @@ const Register = () => {
         emailError,
       ] = useCreateUserWithEmailAndPassword(auth, {sendEmailVerification: true});
 
+      const [signInWithGoogle, googleUser, googleLoading, googleError] = useSignInWithGoogle(auth);
+
       
       useEffect( () => {
         if (emailUser) {
@@ -25,11 +27,18 @@ const Register = () => {
         }
     }, [emailUser] )
 
-    if(emailLoading) {
+    useEffect( () => {
+        if(googleUser) {
+            console.log(googleUser);
+            toast.success('User Logged In', {id: 'user logged in'})
+        }
+    }, [googleUser] )
+
+    if(emailLoading || googleLoading) {
         return <Loading/>
     }
 
-    if(emailError) {
+    if(emailError || googleError) {
         toast.error(emailError.message, {id: 'email error'})
     }
 
@@ -121,7 +130,7 @@ const Register = () => {
                         </form>
                         <div className="divider">OR</div>
                         <div className="form-control">
-                            <button className="btn btn-success text-white"> <BsGoogle className='text-xl text-red-500 mr-3' />Continue With Google</button>
+                            <button onClick={ () => signInWithGoogle() } className="btn btn-success text-white"> <BsGoogle className='text-xl text-red-500 mr-3' />Continue With Google</button>
                         </div>
                     </div>
                 </div>
