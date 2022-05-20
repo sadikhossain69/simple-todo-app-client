@@ -2,14 +2,38 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { BsGoogle } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
+import auth from '../firebase.init';
+import { useCreateUserWithEmailAndPassword } from 'react-firebase-hooks/auth';
+import Loading from './Loading';
 
 const Register = () => {
 
-    const { register, handleSubmit, watch, formState: { errors } } = useForm()
+    const { register, handleSubmit, reset, formState: { errors } } = useForm()
+    const [
+        createUserWithEmailAndPassword,
+        emailUser,
+        emailLoading,
+        emailError,
+      ] = useCreateUserWithEmailAndPassword(auth, {sendEmailVerification: true});
+
+      
+    if(emailUser) {
+        console.log(emailUser);
+    }
+
+    if(emailLoading) {
+        return <Loading/>
+    }
+    
 
     const onRegister = data => {
-        console.log(data);
+        const email = data.email
+        const password = data.password
+        console.log(email, password);
+        createUserWithEmailAndPassword(email, password)
+        reset()
     }
+
 
     return (
         <div>
